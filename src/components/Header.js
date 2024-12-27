@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { addUser, removeUser } from '../utils/createSlice';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
+import {auth} from "../firebase"
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,16 @@ const Header = () => {
     return () => unsubscribe();
 
   }, []);
+
+  const handleSignOut = () =>{
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      navigate("/")
+    }).catch((error) => {
+      // An error happened.
+      navigate("/Error")
+    });
+  }
   return (
     <div className='flex absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 justify-between'>
       <img
@@ -35,13 +46,13 @@ const Header = () => {
         src='https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png'
         alt="logo"
       />
-      <div className='flex'>
+      <div className='flex p-2'>
       <img
-        className='w-20'
+        className='max-w-16'
         src='https://cdn-icons-png.freepik.com/256/16697/16697253.png?semt=ais_hybrid'
         alt="logo"
       />
-
+      <button onClick={handleSignOut} className='text-white px-2'>Sign Out</button>
       </div>
     </div>
   )
